@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TRUSSFALL — Bridge engineering, no shortcuts</title>
+<meta name="description" content="TRUSSFALL is a bridge-building puzzle game for iPhone and iPad. Ninety-nine levels of real structural physics — design a span that carries the load, or watch it fall.">
+<link rel="canonical" href="https://trussfall.com/">
+<meta name="theme-color" content="#ece4d0">
+<meta name="apple-itunes-app" content="app-id=6768887407">
+
+<!-- Open Graph / social preview. Add an og:image (1200×630) later if you make one. -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="TRUSSFALL — Bridge engineering, no shortcuts">
+<meta property="og:description" content="A bridge-building puzzle game for iOS. Real structural physics, ninety-nine levels — build a span that holds, or watch it fall.">
+<meta property="og:url" content="https://trussfall.com/">
+<meta name="twitter:card" content="summary">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23ece4d0'/%3E%3Cg fill='none' stroke='%23221e16' stroke-width='2' stroke-linejoin='round'%3E%3Cpath d='M16 5 L28 27 L4 27 Z'/%3E%3Cpath d='M10 16 L22 16 L16 27'/%3E%3C/g%3E%3Cg fill='%239c7a1f'%3E%3Ccircle cx='16' cy='5' r='2.6'/%3E%3Ccircle cx='28' cy='27' r='2.6'/%3E%3Ccircle cx='4' cy='27' r='2.6'/%3E%3C/g%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Spectral:wght@400;500;600&family=Zilla+Slab:wght@500;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#ece4d0;
+    --bg-2:#e3d9bb;
+    --ink:#221e16;
+    --ink-soft:#6a6147;
+    --gold:#9c7a1f;
+    --line:#cabd99;
+    --grid:rgba(34,30,22,.05);
+    --mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+    --slab:'Zilla Slab',Georgia,serif;
+    --serif:'Spectral',Georgia,'Times New Roman',serif;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+
+  html,body{background:var(--bg)}
+
+  body{
+    color:var(--ink);
+    font-family:var(--serif);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    /* faint engineering graph-paper grid */
+    background-image:
+      linear-gradient(var(--grid) 1px,transparent 1px),
+      linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+    background-size:30px 30px;
+    background-position:center top;
+  }
+
+  .wrap{
+    max-width:660px;
+    margin:0 auto;
+    padding:clamp(3rem,9vw,5.5rem) 1.6rem 3rem;
+  }
+
+  /* ---- hero ---- */
+  .kicker{
+    font-family:var(--mono);
+    font-weight:500;
+    font-size:.72rem;
+    letter-spacing:.26em;
+    text-transform:uppercase;
+    color:var(--gold);
+  }
+
+  h1{
+    font-family:var(--slab);
+    font-weight:700;
+    font-size:clamp(2.7rem,8.5vw,4.1rem);
+    line-height:1.04;
+    letter-spacing:-.015em;
+    margin-top:1.4rem;
+  }
+
+  .lead{
+    font-size:clamp(1.05rem,2.6vw,1.22rem);
+    line-height:1.62;
+    margin-top:1.5rem;
+    max-width:32em;
+  }
+
+  /* ---- call to action ---- */
+  .cta{
+    display:inline-flex;
+    align-items:center;
+    gap:.6em;
+    margin-top:2.3rem;
+    padding:1.05em 1.7em;
+    background:var(--ink);
+    color:var(--bg);
+    font-family:var(--mono);
+    font-weight:500;
+    font-size:.79rem;
+    letter-spacing:.09em;
+    text-transform:uppercase;
+    text-decoration:none;
+    border-radius:3px;
+    transition:transform .22s ease,box-shadow .22s ease;
+  }
+  .cta:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 24px rgba(34,30,22,.22);
+  }
+  .cta .arrow{transition:transform .22s ease}
+  .cta:hover .arrow{transform:translateX(4px)}
+  .cta:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+
+  /* ---- truss divider ---- */
+  .truss{
+    display:block;
+    width:100%;
+    height:auto;
+    margin:3.6rem 0 3.2rem;
+    opacity:.6;
+  }
+
+  /* ---- feature sections ---- */
+  .feat{margin-top:2.1rem}
+  .feat h2{
+    font-family:var(--mono);
+    font-weight:700;
+    font-size:.8rem;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--ink);
+  }
+  .feat h2 .num{color:var(--gold)}
+  .feat p{
+    font-size:1.04rem;
+    margin-top:.55rem;
+    max-width:34em;
+  }
+
+  /* ---- footer ---- */
+  footer{
+    margin-top:4.2rem;
+    padding-top:1.6rem;
+    border-top:1px solid var(--line);
+  }
+  .flinks{
+    font-family:var(--mono);
+    font-size:.74rem;
+    letter-spacing:.04em;
+  }
+  .flinks a{color:var(--gold);text-decoration:none}
+  .flinks a:hover{text-decoration:underline}
+  .flinks a:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+  .sep{color:var(--line);margin:0 .55em}
+  .fcopy{
+    font-family:var(--mono);
+    font-size:.68rem;
+    letter-spacing:.05em;
+    color:var(--ink-soft);
+    margin-top:.85rem;
+  }
+
+  /* ---- entrance animation ---- */
+  @keyframes rise{
+    from{opacity:0;transform:translateY(16px)}
+    to{opacity:1;transform:none}
+  }
+  .reveal{opacity:0;animation:rise .7s cubic-bezier(.2,.65,.3,1) forwards}
+  .d2{animation-delay:.09s}
+  .d3{animation-delay:.18s}
+  .d4{animation-delay:.27s}
+  .d5{animation-delay:.36s}
+  .d6{animation-delay:.45s}
+  .d7{animation-delay:.54s}
+  .d8{animation-delay:.63s}
+  @media (prefers-reduced-motion:reduce){
+    .reveal{animation:none;opacity:1}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="kicker reveal">— TRUSSFALL —</p>
+    <h1 class="reveal d2">Bridge engineering.<br>No shortcuts.</h1>
+    <p class="lead reveal d3">
+      A puzzle game about building bridges that genuinely have to stand up.
+      Lay out beams, trusses, and cables, release the load, and let real
+      structural forces hand down the verdict — a span that carries, or one
+      that buckles, snaps, and folds into the gap.
+    </p>
+    <a class="cta reveal d4" href="https://apps.apple.com/app/trussfall/id6768887407">
+      Download on the App Store
+      <span class="arrow" aria-hidden="true">&rarr;</span>
+    </a>
+  </header>
+
+  <!-- Warren truss divider -->
+  <svg class="truss reveal d5" viewBox="0 0 600 64" preserveAspectRatio="xMidYMid meet" role="presentation" aria-hidden="true">
+    <g fill="none" stroke="#9c7a1f" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="0" y1="50" x2="600" y2="50"/>
+      <line x1="60" y1="14" x2="540" y2="14"/>
+      <polyline points="0,50 60,14 120,50 180,14 240,50 300,14 360,50 420,14 480,50 540,14 600,50"/>
+    </g>
+    <g fill="#9c7a1f">
+      <circle cx="0" cy="50" r="3"/><circle cx="120" cy="50" r="3"/><circle cx="240" cy="50" r="3"/>
+      <circle cx="360" cy="50" r="3"/><circle cx="480" cy="50" r="3"/><circle cx="600" cy="50" r="3"/>
+      <circle cx="60" cy="14" r="3"/><circle cx="180" cy="14" r="3"/><circle cx="300" cy="14" r="3"/>
+      <circle cx="420" cy="14" r="3"/><circle cx="540" cy="14" r="3"/>
+    </g>
+  </svg>
+
+  <main>
+    <section class="feat reveal d6">
+      <h2><span class="num">01 /</span> The Game</h2>
+      <p>
+        Ninety-nine hand-built levels, each one a gap that has to be crossed.
+        Early trials give you timber and a tight budget. Later you earn steel,
+        cable, and reinforced members — and gaps wide enough that a guess won't
+        reach the far side.
+      </p>
+    </section>
+
+    <section class="feat reveal d7">
+      <h2><span class="num">02 /</span> Honest Physics</h2>
+      <p>
+        Every member carries tension or compression, and every member has a
+        point where it gives. Nothing on screen is decorative — if a span holds,
+        it holds because the forces balanced, and you can see exactly where
+        they didn't.
+      </p>
+    </section>
+
+    <section class="feat reveal d8">
+      <h2><span class="num">03 /</span> One Person, No Filler</h2>
+      <p>
+        TRUSSFALL is built and maintained by a single developer. Nothing to
+        sign up for, no feeds to scroll — just the puzzles, the materials, and
+        a bridge that either stands or doesn't.
+      </p>
+    </section>
+  </main>
+
+  <footer class="reveal d8">
+    <p class="flinks">
+      <a href="/privacy.html">Privacy</a><span class="sep">·</span>
+      <a href="/terms.html">Terms</a><span class="sep">·</span>
+      <a href="/support.html">Support</a>
+    </p>
+    <p class="fcopy">© 2026 Ciprian Frasinescu · TRUSSFALL</p>
+  </footer>
+
+</div>
+</body>
+</html>
