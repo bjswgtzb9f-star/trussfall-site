@@ -4,15 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>TRUSSFALL — Bridge engineering, no shortcuts</title>
-<meta name="description" content="TRUSSFALL is a bridge-building puzzle game for iPhone and iPad. Ninety-nine levels of real structural physics — design a span that carries the load, or watch it fall.">
+<meta name="description" content="TRUSSFALL is a bridge-building puzzle game for iPhone, iPad, and Android. Ninety-nine levels of real structural physics — design a span that carries the load, or watch it fall.">
 <link rel="canonical" href="https://trussfall.com/">
 <meta name="theme-color" content="#ece4d0">
+<!-- Safari Smart App Banner. iOS-only by design, and correct as-is —
+     it simply does nothing on Android. Leave it. -->
 <meta name="apple-itunes-app" content="app-id=6768887407">
 
 <!-- Open Graph / social preview. Add an og:image (1200×630) later if you make one. -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="TRUSSFALL — Bridge engineering, no shortcuts">
-<meta property="og:description" content="A bridge-building puzzle game for iOS. Real structural physics, ninety-nine levels — build a span that holds, or watch it fall.">
+<meta property="og:description" content="A bridge-building puzzle game for iOS and Android. Real structural physics, ninety-nine levels — build a span that holds, or watch it fall.">
 <meta property="og:url" content="https://trussfall.com/">
 <meta name="twitter:card" content="summary">
 
@@ -86,12 +88,22 @@
     max-width:32em;
   }
 
-  /* ---- call to action ---- */
+  /* ---- call to action ----
+     .cta-row wraps the store buttons. It exists so a second button can be
+     added without the two colliding on a narrow screen: they sit side by
+     side where there's room and stack where there isn't. The margin that
+     used to live on .cta now lives here, so buttons align on one baseline. */
+  .cta-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:.85rem;
+    margin-top:2.3rem;
+  }
+
   .cta{
     display:inline-flex;
     align-items:center;
     gap:.6em;
-    margin-top:2.3rem;
     padding:1.05em 1.7em;
     background:var(--ink);
     color:var(--bg);
@@ -191,10 +203,18 @@
       structural forces hand down the verdict — a span that carries, or one
       that buckles, snaps, and folds into the gap.
     </p>
-    <a class="cta reveal d4" href="https://apps.apple.com/app/trussfall/id6768887407">
-      Download on the App Store
-      <span class="arrow" aria-hidden="true">&rarr;</span>
-    </a>
+
+    <div class="cta-row reveal d4">
+      <a class="cta" href="https://apps.apple.com/app/trussfall/id6768887407">
+        Download on the App Store
+        <span class="arrow" aria-hidden="true">&rarr;</span>
+      </a>
+
+      <a class="cta" href="https://play.google.com/store/apps/details?id=com.trussfall.app">
+        Get it on Google Play
+        <span class="arrow" aria-hidden="true">&rarr;</span>
+      </a>
+    </div>
   </header>
 
   <!-- Warren truss divider -->
